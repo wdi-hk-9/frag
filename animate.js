@@ -1,7 +1,7 @@
 window.addEventListener('load', function () {
   var
     // game specific parameters
-    IMG_PATH = "image/GA/images/ShipStrip.png",
+    IMG_PATH = "resources/images/ShipStrip.png",
     FPS = 50,
     DISTANCE_PER_SECOND = 150, // in px
     ROTATE_PER_SECOND = 135, // in degrees
