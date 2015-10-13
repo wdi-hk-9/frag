@@ -1,92 +1,80 @@
 // Ammo object constructor. Argument map example given:
-// argmap = {
-//   x: 50,
-//   y: 50,
-//   angle: 0,
-//   ammoIndexArr: [3],
-//   speed: 2
-// }
-function createAmmo(argmap) {
-  'use strict';
-  var
-    width = 40,
-    height = 40,
-    halfWidth = 20,
-    halfHeight = 20,
-    // argmap.x and argmap.y is the center of the ship. we realign the center of the
+
+var Ammo = function (x, y, speed, angle, ammoIndexArr) {
+
+    this.width = 100,
+    this.height = 100,
+    this.ammoLifeFramesLeft = 30,
+
+    this.halfWidth = (this.width / 2),
+    this.halfHeight = (this.height / 2),
+    this.srcPath = "resources/images/BulletStrip.png",
+    this.srcSpriteSize = 64,
+
+    // x and y provided as arguments denote the center of the ship. we realign the center of the
     // ammo to the ship center
-    x = argmap.x - halfWidth,
-    y = argmap.y - halfHeight,
-    angle = argmap.angle,
-    ammoIndexArr = argmap.ammoIndexArr, // position of ship on the sprite sheet
-    speed = argmap.speed,
-    srcPath = "resources/images/BulletStrip.png",
-    srcSpriteSize = 64,
-    angleInRadians = angle * Math.PI / 180,
-    i = 0,
-    image = new Image(),
-    max_x = 2000,
-    max_y = 2000,
-    min_x = -width,
-    min_y = -height,
-    ammoLifeInFrames = 5,
-    ammoLifeElapsedInFrames = 0;
+    this.x = x - this.halfWidth,
+    this.y = y - this.halfHeight,
+    this.angle = angle,
+    this.ammoIndexArr = ammoIndexArr, // position of ship on the sprite sheet
+    this.speed = 2 * speed,
+    this.angleInRadians = this.angle * Math.PI / 180,
+    this.i = 0,
+    this.image = new Image(),
+    this.max_x = 2000,
+    this.max_y = 2000,
+    this.min_x = -this.width,
+    this.min_y = -this.height,
+    this.remove = false;
 
-  image.src = srcPath;
+  this.image.src = this.srcPath;
+}
 
-  function update() {
-    ammoLifeElapsedInFrames++;
-    x = x + speed * Math.cos(angleInRadians);
-    y = y + speed * Math.sin(angleInRadians);
+Ammo.prototype.update = function () {
+  if (this.ammoLifeFramesLeft <= 0
+      || this.x < this.min_x
+      || this.x > this.max_x
+      || this.y < this.min_y
+      || this.y > this.max_y) {
+    this.remove = true;
+  } else {
+    this.ammoLifeFramesLeft--;
+    this.x = this.x + this.speed * Math.cos(this.angleInRadians);
+    this.y = this.y + this.speed * Math.sin(this.angleInRadians);
   }
+}
 
-  function xPosition(index) {
-    return 0;
-  }
+Ammo.prototype.xPosition = function (index) {
+  return 0;
+}
 
-  function yPosition(index) {
-    return index;
-  }
+Ammo.prototype.yPosition = function (index) {
+  return index;
+}
 
-  function render(context) {
-    // for rotation, translate the canvas to center of image then rotate
-    angleInRadians = angle * Math.PI / 180;
-    context.save();
-    context.setTransform(1,0,0,1,0,0);
-    context.translate(x + halfWidth, y + halfHeight);
-    context.rotate(angleInRadians);
+Ammo.prototype.render = function (context) {
+  // for rotation, translate the canvas to center of image then rotate
+  this.angleInRadians = this.angle * Math.PI / 180;
+  context.save();
+  context.setTransform(1,0,0,1,0,0);
+  context.translate(this.x + this.halfWidth, this.y + this.halfHeight);
+  context.rotate(this.angleInRadians);
 
-    // draw ship
-    context.drawImage(
-      // sprite sheet
-      image,
-      // src position on sprite sheet
-      srcSpriteSize * xPosition(ammoIndexArr[i]), srcSpriteSize * yPosition(ammoIndexArr[i]),
-      // src dimensions
-      srcSpriteSize, srcSpriteSize,
-      // dest poition on canvas
-      (0 - halfWidth), (0 - halfHeight),
-      // dest dimensions
-      width, height);
-    context.restore();
+  // draw ship
+  context.drawImage(
+    // sprite sheet
+    this.image,
+    // src position on sprite sheet
+    this.srcSpriteSize * this.xPosition(this.ammoIndexArr[this.i]),
+    this.srcSpriteSize * this.yPosition(this.ammoIndexArr[this.i]),
+    // src dimensions
+    this.srcSpriteSize, this.srcSpriteSize,
+    // dest poition on canvas
+    (0 - this.halfWidth), (0 - this.halfHeight),
+    // dest dimensions
+    this.width, this.height);
+  context.restore();
 
-    i++;
-    if (i >= ammoIndexArr.length) {
-      i = 0;
-    }
-  }
-
-  return {
-    ammoLifeInFrames: ammoLifeInFrames,
-    ammoLifeElapsedInFrames: ammoLifeElapsedInFrames,
-    update: update,
-    render: render,
-    x: x,
-    y: y,
-    max_x: max_x,
-    max_y: max_y,
-    min_x: min_x,
-    min_y: min_y
-  }
-
+  this.i++;
+  if (this.i >= this.ammoIndexArr.length) this.i = 0;
 }

@@ -59,7 +59,7 @@ function createGame () {
       x: 50,
       y: 50,
       angle: 0,
-      spriteIndexArr: [1],
+      spriteIndexArr: [4],
       omega: BASE.OMEGA,
       speed: BASE.VELOCITY,
       isPlayerOne: true
@@ -70,7 +70,7 @@ function createGame () {
       x: 750,
       y: 300,
       angle: 180,
-      spriteIndexArr: [3],
+      spriteIndexArr: [2],
       omega: BASE.OMEGA,
       speed: BASE.VELOCITY,
       isPlayerOne: false

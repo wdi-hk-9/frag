@@ -183,6 +183,7 @@ function createShip (argmap) {
   function fireAmmo() {
     // only allow fire if the delay between shots has been met
     if (framesSinceLastFired > firingDelayInFrames) {
+      console.log(framesSinceLastFired);
       var ammo = createAmmo({
           x: x + halfWidth,
           y: y + halfHeight,

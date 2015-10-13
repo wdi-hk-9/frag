@@ -37,12 +37,10 @@ function createShip (argmap) {
     max_x = $canvas.width(),
     max_y = $canvas.height(),
     liveAmmo = [],
-    firingDelayInFrames = 10,
+    firingDelayInFrames = 1,
     framesSinceLastFired = Infinity;
 
-
   image.src = srcPath;
-
 
   function update() {
     var new_x, new_y;
@@ -73,22 +71,16 @@ function createShip (argmap) {
     if (ROTATE_CLOCK) { angle += omega; }
     if (ROTATE_ANTI) { angle -= omega; }
 
-    // update the liveAmmo array
-    liveAmmo = liveAmmo
-      .filter(function(e) {
-        // remove all ammo that have expired
-        return e.ammoLifeElapsedInFrames <= e.ammoLifeInFrames;
-      })
-      .filter(function(e) {
-        // remove all ammo that have travelled beyond screen
-        return e.x < e.max_x && e.x > e.min_x && e.y < e.max_y && e.y > e.min_y;
-      });
-
     // update the positions of each live ammo object
-    liveAmmo
-      .forEach(function(e) {
-        e.update();
+      liveAmmo = liveAmmo
+      .filter(function (e) {
+        return (!e.remove);
       })
+
+      liveAmmo
+      .forEach(function (e) {
+        e.update();
+      });
   }
 
   function xPosition(index) {
@@ -127,7 +119,7 @@ function createShip (argmap) {
     }
 
     liveAmmo
-    .forEach(function(e) {
+    .forEach( function(e) {
       e.render(context);
     });
   }
@@ -183,14 +175,14 @@ function createShip (argmap) {
   function fireAmmo() {
     // only allow fire if the delay between shots has been met
     if (framesSinceLastFired > firingDelayInFrames) {
-      var ammo = createAmmo({
-          x: x + halfWidth,
-          y: y + halfHeight,
-          angle: angle,
-          ammoIndexArr: spriteIndexArr, // ammo sprite positions correspond to ship sprite positions
-          speed: (2 * speed)
-        });
+      var ammo = new Ammo(
+        x + halfWidth,
+        y + halfHeight,
+        speed,
+        angle,
+        spriteIndexArr);
       liveAmmo.push(ammo);
+
       framesSinceLastFired = 0;
     }
   }
