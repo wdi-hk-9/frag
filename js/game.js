@@ -64,12 +64,12 @@ function createGame () {
     // initialize sounds object pools using AudioFX
     // https://github.com/jakesgordon/javascript-audio-fx
     playerOneSound = AudioFX('resources/audio/shot1.wav', { volume: 1, pool: 10 });
-    playerTwoSound = AudioFX('resources/audio/shot2.wav', { volume: 1, pool: 10 });
+    playerTwoSound = AudioFX('resources/audio/shot5.wav', { volume: 1, pool: 10 });
     impactSound = AudioFX('resources/audio/impact.wav', { volume: 1, pool: 10 });
 
     // initialize ship objects
     playerOne = new Ship(START_POS_ONE, utils.shipConfig[2], playerOneSound);
-    playerTwo = new Ship(START_POS_TWO, utils.shipConfig[3], playerTwoSound);
+    playerTwo = new Ship(START_POS_TWO, utils.shipConfig[4], playerTwoSound);
 
     // initialize player lives
     playerOneLife = new Life(1);

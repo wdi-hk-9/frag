@@ -14,16 +14,16 @@ var shipConfig = [
       damage: 10
     }
   },
-  // slow fire, big ammo, long range, medium damage, purple ship (1)
+  // medium fire, medium sized ammo, medium range, medium damage, green ship (1)
   {
     spriteIndexArr: [1],
     omega: 3,
     speed: 3,
-    firingDelay: 25,
+    firingDelay: 15,
     ammoSpec: {
       speed: 9, // multiples of 3
-      size: 70,
-      life: 80,
+      size: 30,
+      life: 40,
       damage: 10
     }
   },
@@ -40,17 +40,17 @@ var shipConfig = [
       damage: 15 // damage dealt
     }
   },
-  // medium fire, medium sized ammo, medium range, medium damage, green ship (3)
+  // slow fire, big ammo, long range, high damage, purple ship (3)
   {
     spriteIndexArr: [3],
     omega: 3,
     speed: 3,
-    firingDelay: 15,
+    firingDelay: 30,
     ammoSpec: {
       speed: 9, // multiples of 3
-      size: 30,
-      life: 40,
-      damage: 10
+      size: 70,
+      life: 80,
+      damage: 15
     }
   },
   // fast fire, small ammo, long range, low damage, yellow ship (4)
@@ -63,7 +63,7 @@ var shipConfig = [
       speed: 6, // multiples of 3
       size: 20, // ammo size in px
       life: 120, // ammo life in frames
-      damage: 2 // damage dealt
+      damage: 3 // damage dealt
     }
   }
 ];
