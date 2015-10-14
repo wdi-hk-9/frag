@@ -7,6 +7,9 @@ function createGame () {
   'use strict';
   var
     currentGameStateFunction, playerOne, playerTwo,
+    playerOneLife, playerTwoLife,
+    winner,
+    playerOneSound, playerTwoSound, impactSound,
     theCanvas = $("#canvas").get(0),
     context = theCanvas.getContext("2d"),
     //application states
@@ -14,6 +17,8 @@ function createGame () {
     GAME_STATE_INIT = 1,
     GAME_STATE_PLAY = 2,
     GAME_STATE_GAME_OVER = 3,
+    START_POS_ONE = {x:50, y:50, angle:0},
+    START_POS_TWO = {x:750, y:300, angle:180},
     explosionArr = [],
     // game level parameters
     BASE = {
@@ -21,6 +26,8 @@ function createGame () {
       DISTANCE_PER_SECOND: 150, // px moved in 1sec
       ROTATE_PER_SECOND: 135, // angular velocity in degrees/sec
       CANVAS_BACKGROUND: '#000000',
+      CANVAS_FONT: '20px sans-serif',
+      CANVAS_TEXTCOLOR: '#ffffff',
       CANVAS_WIDTH: 900,
       CANVAS_HEIGHT: 500,
       MS_PER_SECOND: 1000
@@ -31,14 +38,15 @@ function createGame () {
 
   // gameloop functions corresponding to application states
   function gameStateTitle() {
-    // draw background and text
+    // draw background
     context.fillStyle = BASE.CANVAS_BACKGROUND;
     context.fillRect(0, 0, BASE.CANVAS_WIDTH, BASE.CANVAS_HEIGHT);
-    context.fillStyle = '#ffffff';
-    context.font = '20px sans-serif';
+    // render text
+    context.fillStyle = BASE.CANVAS_TEXTCOLOR;
+    context.font = BASE.CANVAS_FONT;
     context.textBaseline = 'top';
     context.fillText ("FRAG", 50, 90);
-    context.fillText ("Press Space To Play", 50, 200);
+    context.fillText ("Shoot to kill!!", 50, 200);
 
     window.setTimeout(function(){
       switchGameState(GAME_STATE_INIT);
@@ -53,13 +61,26 @@ function createGame () {
     context.textBaseline = 'top';
     context.fillText ("Initializing", 50, 90);
 
+    // initialize sounds object pools using AudioFX
+    // https://github.com/jakesgordon/javascript-audio-fx
+    playerOneSound = AudioFX('resources/audio/shot1.wav', { volume: 1, pool: 10 });
+    playerTwoSound = AudioFX('resources/audio/shot2.wav', { volume: 1, pool: 10 });
+    impactSound = AudioFX('resources/audio/impact.wav', { volume: 1, pool: 10 });
+
     // initialize ship objects
-    playerOne = new Ship(utils.shipConfig[0]);
-    playerTwo = new Ship(utils.shipConfig[1]);
+    playerOne = new Ship(START_POS_ONE, utils.shipConfig[2], playerOneSound);
+    playerTwo = new Ship(START_POS_TWO, utils.shipConfig[3], playerTwoSound);
+
+    // initialize player lives
+    playerOneLife = new Life(1);
+    playerTwoLife = new Life(2);
 
     // bind game keys
     utils.bindKeys(playerOne, playerTwo);
+    // bind enter key to enable restart after game end
+    bindKeyRestart(switchGameState);
 
+    // hack to remove flicker between game state transitions
     setTimeout(function() {
       switchGameState(GAME_STATE_PLAY);
     },2000);
@@ -73,10 +94,18 @@ function createGame () {
     playerTwo.update();
     playerTwo.render(context);
     checkCollision(playerOne, playerTwo);
+    checkGameEnd();
   }
 
   function gameStateGameOver() {
-    console.log("appStateGameOver");
+    context.fillStyle = BASE.CANVAS_BACKGROUND;
+    context.fillRect(0, 0, BASE.CANVAS_WIDTH, BASE.CANVAS_HEIGHT);
+    // render text
+    context.fillStyle = BASE.CANVAS_TEXTCOLOR;
+    context.font = BASE.CANVAS_FONT;
+    context.textBaseline = 'top';
+    context.fillText (winner + ' wins!!', 50, 90);
+    context.fillText ("Press Enter To Replay", 50, 200);
   }
 
   // function to switch application states
@@ -108,7 +137,9 @@ function createGame () {
       .forEach(function (e) {
         // explosion at the center of ammo
         explosionArr.push(new Explosion(e.x+e.halfWidth, e.y+e.halfHeight));
+        impactSound.play();
         e.remove = true;
+        playerTwoLife.update(e.damage);
       });
 
     playerTwo.liveAmmo
@@ -117,7 +148,9 @@ function createGame () {
       })
       .forEach(function (e) {
         explosionArr.push(new Explosion(e.x+e.halfWidth, e.y+e.halfHeight));
+        impactSound.play();
         e.remove = true;
+        playerOneLife.update(e.damage);
       });
 
     explosionArr = explosionArr.filter(
@@ -129,9 +162,31 @@ function createGame () {
       function(e) {
         e.render(context);
     })
-
+    playerOneLife.render(context);
+    playerTwoLife.render(context);
   }
 
+  function checkGameEnd() {
+    if (playerOneLife.score <= 0) {
+      winner = 'Player 2'
+      switchGameState(GAME_STATE_GAME_OVER);
+    }
+
+    if (playerTwoLife.score <= 0) {
+      winner = 'Player 1'
+      switchGameState(GAME_STATE_GAME_OVER);
+    }
+  }
+
+  function bindKeyRestart(switchGameState) {
+    $(document).on(
+      'keydown',
+      function(e) {
+        if (currentGameStateFunction == gameStateGameOver && e.keyCode === 13) { // enter
+          switchGameState(GAME_STATE_TITLE);
+        }
+      });
+  }
   //
   function gameLoop() {
     currentGameStateFunction();

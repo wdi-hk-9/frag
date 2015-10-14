@@ -1,35 +1,69 @@
 var utils = (function () {
 
 var shipConfig = [
+  // medium fire, medium sized ammo, medium range, medium damage, gray ship (0)
   {
-    x: 50,
-    y: 50,
-    angle: 0,
+    spriteIndexArr: [0],
+    omega: 3,
+    speed: 3,
+    firingDelay: 15,
+    ammoSpec: {
+      speed: 9, // multiples of 3
+      size: 30,
+      life: 40,
+      damage: 10
+    }
+  },
+  // slow fire, big ammo, long range, medium damage, purple ship (1)
+  {
+    spriteIndexArr: [1],
+    omega: 3,
+    speed: 3,
+    firingDelay: 25,
+    ammoSpec: {
+      speed: 9, // multiples of 3
+      size: 70,
+      life: 80,
+      damage: 10
+    }
+  },
+  // fast fire, big ammo, very short range, high damage red ship (2)
+  {
     spriteIndexArr: [2],
     omega: 3,
     speed: 3,
-    firingDelay: 1, // no of frames before next shot can be fired
+    firingDelay: 2, // no of frames before next shot can be fired
     ammoSpec: {
       speed: 6, // multiples of 3
-      size: 64, // ammo size in px
-      life: 40, // ammo life in frames
-      damage: 10 // damage dealt
+      size: 70, // ammo size in px
+      life: 20, // ammo life in frames
+      damage: 15 // damage dealt
     }
   },
-
+  // medium fire, medium sized ammo, medium range, medium damage, green ship (3)
   {
-    x: 750,
-    y: 300,
-    angle: 180,
     spriteIndexArr: [3],
     omega: 3,
     speed: 3,
     firingDelay: 15,
     ammoSpec: {
       speed: 9, // multiples of 3
-      size: 32,
-      life: 80,
-      damage: 5
+      size: 30,
+      life: 40,
+      damage: 10
+    }
+  },
+  // fast fire, small ammo, long range, low damage, yellow ship (4)
+  {
+    spriteIndexArr: [4],
+    omega: 3,
+    speed: 3,
+    firingDelay: 5, // no of frames before next shot can be fired
+    ammoSpec: {
+      speed: 6, // multiples of 3
+      size: 20, // ammo size in px
+      life: 120, // ammo life in frames
+      damage: 2 // damage dealt
     }
   }
 ];
@@ -106,33 +140,3 @@ return {
 }
 
 }());
-
-
-// http://stackoverflow.com/questions/8489710/play-an-audio-file-using-jquery-when-a-button-is-clicked
-
-// <div class="play">Play</div>
-
-// <div class="pause">Stop</div>
-
-// <script>
-//     $(document).ready(function() {
-//         var audioElement = document.createElement('audio');
-//         audioElement.setAttribute('src', 'audio.mp3');
-//         audioElement.setAttribute('autoplay', 'autoplay');
-//         //audioElement.load()
-
-//         $.get();
-
-//         audioElement.addEventListener("load", function() {
-//             audioElement.play();
-//         }, true);
-
-//         $('.play').click(function() {
-//             audioElement.play();
-//         });
-
-//         $('.pause').click(function() {
-//             audioElement.pause();
-//         });
-//     });
-// </script>

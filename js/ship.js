@@ -1,19 +1,20 @@
-// Ship object constructor. Argument map example given:
+// Ship object constructor. posMap contains the initial starting positions
+// configMap contains the ship/ammo configurations
 
-var Ship = function (argmap) {
-  // initialized from argmap
-  this.x = argmap.x;
-  this.y = argmap.y;
-  this.angle = argmap.angle;
-  this.spriteIndexArr = argmap.spriteIndexArr; // position of ship on the sprite shee;
-  this.omega = argmap.omega;
-  this.speed = argmap.speed;
-  this.firingDelayInFrames = argmap.firingDelay;
-  this.ammoSpec = argmap.ammoSpec; // ammo Size, Speed, Life, Damage
-
+var Ship = function (posMap, configMap, soundPool) {
+  // initialized from configMap
+  this.x = posMap.x;
+  this.y = posMap.y;
+  this.angle = posMap.angle;
+  this.spriteIndexArr = configMap.spriteIndexArr; // position of ship on the sprite shee;
+  this.omega = configMap.omega;
+  this.speed = configMap.speed;
+  this.firingDelayInFrames = configMap.firingDelay;
+  this.ammoSpec = configMap.ammoSpec; // ammo Size, Speed, Life, Damage
+  this.soundPool = soundPool;
   // defaults
-  this.width = 64;
-  this.height = 64;
+  this.width = 50;
+  this.height = 50;
   this.MOVE_FORWARD = false;
   this.MOVE_BACKWARD = false;
   this.ROTATE_CLOCK = false;
@@ -130,6 +131,7 @@ Ship.prototype.fireAmmo = function () {
     });
 
     this.liveAmmo.push(ammo);
+    this.soundPool.play();
     this.framesSinceLastFired = 0;
   }
 }
