@@ -1,36 +1,36 @@
 // Ammo object constructor. Argument map example given:
 
-var Ammo = function (x, y, speed, angle, ammoIndexArr) {
+var Ammo = function (argmap) {
 
-    this.width = 100,
-    this.height = 100,
-    this.ammoLifeFramesLeft = 30,
-
+    // initialized from argmap
+    this.width = argmap.size;
+    this.height = argmap.size;
+    this.ammoLifeFramesLeft = argmap.life;
+    this.speed = argmap.speed;
+    this.damage = argmap.damage;
     this.halfWidth = (this.width / 2),
     this.halfHeight = (this.height / 2),
-    this.srcPath = "resources/images/BulletStrip.png",
-    this.srcSpriteSize = 64,
+    // x and y set such that bullet is initially centered on ship
+    this.x = argmap.x - this.halfWidth,
+    this.y = argmap.y - this.halfHeight,
+    this.angle = argmap.angle,
+    this.ammoIndexArr = argmap.ammoIndexArr, // position of ship on the sprite sheet
 
-    // x and y provided as arguments denote the center of the ship. we realign the center of the
-    // ammo to the ship center
-    this.x = x - this.halfWidth,
-    this.y = y - this.halfHeight,
-    this.angle = angle,
-    this.ammoIndexArr = ammoIndexArr, // position of ship on the sprite sheet
-    this.speed = 2 * speed,
-    this.angleInRadians = this.angle * Math.PI / 180,
-    this.i = 0,
-    this.image = new Image(),
-    this.max_x = 2000,
-    this.max_y = 2000,
-    this.min_x = -this.width,
-    this.min_y = -this.height,
+    // defaults
+    this.angleInRadians = this.angle * Math.PI / 180;
+    this.i = 0;
+    this.max_x = 2000;
+    this.max_y = 2000;
+    this.min_x = -this.width;
+    this.min_y = -this.height;
     this.remove = false;
-
-  this.image.src = this.srcPath;
+    this.image = new Image();
+    this.image.src = "resources/images/BulletStrip.png";
+    this.srcSpriteSize = 64;
 }
 
 Ammo.prototype.update = function () {
+  // remove ammo if life is up or if ammo goes off screen
   if (this.ammoLifeFramesLeft <= 0
       || this.x < this.min_x
       || this.x > this.max_x
@@ -38,6 +38,7 @@ Ammo.prototype.update = function () {
       || this.y > this.max_y) {
     this.remove = true;
   } else {
+    // decrement ammo life
     this.ammoLifeFramesLeft--;
     this.x = this.x + this.speed * Math.cos(this.angleInRadians);
     this.y = this.y + this.speed * Math.sin(this.angleInRadians);
@@ -60,7 +61,7 @@ Ammo.prototype.render = function (context) {
   context.translate(this.x + this.halfWidth, this.y + this.halfHeight);
   context.rotate(this.angleInRadians);
 
-  // draw ship
+  // draw ammo
   context.drawImage(
     // sprite sheet
     this.image,

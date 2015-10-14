@@ -2,8 +2,6 @@
 */
 
 // Game object constructor
-// JavaScript: The Good Parts Chapter 5
-// variation of the functional pattern for object creation
 // "Revealing module pattern"
 function createGame () {
   'use strict';
@@ -16,6 +14,7 @@ function createGame () {
     GAME_STATE_INIT = 1,
     GAME_STATE_PLAY = 2,
     GAME_STATE_GAME_OVER = 3,
+    explosionArr = [],
     // game level parameters
     BASE = {
       FPS: 50,
@@ -54,33 +53,16 @@ function createGame () {
     context.textBaseline = 'top';
     context.fillText ("Initializing", 50, 90);
 
-    //initialize game objects
-    playerOne = createShip({
-      x: 50,
-      y: 50,
-      angle: 0,
-      spriteIndexArr: [1],
-      omega: BASE.OMEGA,
-      speed: BASE.VELOCITY,
-      isPlayerOne: true
-    });
-    playerOne.setKeys();
+    // initialize ship objects
+    playerOne = new Ship(utils.shipConfig[0]);
+    playerTwo = new Ship(utils.shipConfig[1]);
 
-    playerTwo = createShip({
-      x: 750,
-      y: 300,
-      angle: 180,
-      spriteIndexArr: [3],
-      omega: BASE.OMEGA,
-      speed: BASE.VELOCITY,
-      isPlayerOne: false
-    });
-    playerTwo.setKeys();
+    // bind game keys
+    utils.bindKeys(playerOne, playerTwo);
 
-    window.setTimeout(function(){
+    setTimeout(function() {
       switchGameState(GAME_STATE_PLAY);
-    }, 1000);
-
+    },2000);
   }
 
   function gameStatePlay() {
@@ -90,6 +72,7 @@ function createGame () {
     playerOne.render(context);
     playerTwo.update();
     playerTwo.render(context);
+    checkCollision(playerOne, playerTwo);
   }
 
   function gameStateGameOver() {
@@ -114,6 +97,41 @@ function createGame () {
     }
   }
 
+  // this function checks if any of player i's ammo has collided with
+  // player j. If so, it sets the "remove" flag on the ammo to "true"
+  // and produces an explosion at the location of the ammo
+  function checkCollision(player1, player2) {
+    playerOne.liveAmmo
+      .filter(function (e) {
+        return utils.hasCollided(e, playerTwo);
+      })
+      .forEach(function (e) {
+        // explosion at the center of ammo
+        explosionArr.push(new Explosion(e.x+e.halfWidth, e.y+e.halfHeight));
+        e.remove = true;
+      });
+
+    playerTwo.liveAmmo
+      .filter(function (e) {
+        return utils.hasCollided(e, playerOne);
+      })
+      .forEach(function (e) {
+        explosionArr.push(new Explosion(e.x+e.halfWidth, e.y+e.halfHeight));
+        e.remove = true;
+      });
+
+    explosionArr = explosionArr.filter(
+      function(e) {
+        return (!e.remove);
+      });
+
+    explosionArr.forEach(
+      function(e) {
+        e.render(context);
+    })
+
+  }
+
   //
   function gameLoop() {
     currentGameStateFunction();
@@ -130,23 +148,6 @@ function createGame () {
     init: init,
     switchGameState: switchGameState,
     BASE: BASE,
-    context: context,
-    createShip: createShip
+    context: context
   };
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
