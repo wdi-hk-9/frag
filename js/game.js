@@ -10,6 +10,7 @@ function createGame () {
     playerOneLife, playerTwoLife,
     winner,
     playerOneSound, playerTwoSound, impactSound,
+    playerOneMenu, playerTwoMenu, currentMenu,
     theCanvas = $("#canvas").get(0),
     context = theCanvas.getContext("2d"),
     //application states
@@ -26,7 +27,7 @@ function createGame () {
       DISTANCE_PER_SECOND: 150, // px moved in 1sec
       ROTATE_PER_SECOND: 135, // angular velocity in degrees/sec
       CANVAS_BACKGROUND: '#000000',
-      CANVAS_FONT: '20px sans-serif',
+      CANVAS_FONT: "20px 'Orbitron' sans-serif",
       CANVAS_TEXTCOLOR: '#ffffff',
       CANVAS_WIDTH: 900,
       CANVAS_HEIGHT: 500,
@@ -42,34 +43,40 @@ function createGame () {
     context.fillStyle = BASE.CANVAS_BACKGROUND;
     context.fillRect(0, 0, BASE.CANVAS_WIDTH, BASE.CANVAS_HEIGHT);
     // render text
-    context.fillStyle = BASE.CANVAS_TEXTCOLOR;
-    context.font = BASE.CANVAS_FONT;
-    context.textBaseline = 'top';
-    context.fillText ("FRAG", 50, 90);
-    context.fillText ("Shoot to kill!!", 50, 200);
-
-    window.setTimeout(function(){
-      switchGameState(GAME_STATE_INIT);
-    }, 1000);
+    // context.fillStyle = BASE.CANVAS_TEXTCOLOR;
+    // context.font = BASE.CANVAS_FONT;
+    // context.textBaseline = 'top';
+    // context.fillText ("FRAG", 50, 90);
+    // context.fillText ("Shoot to kill!!", 50, 200);
+    if (!currentMenu) {
+      playerOneMenu = new Menu();
+      currentMenu = playerOneMenu;
+      // this allows for the ship selection to be entered,
+      // as well as the switch to PlayerTwo's menu
+      bindKeyGameMenu();
+    }
+    currentMenu.render(context);
   }
 
   function gameStateInit() {
+    var P1 = utils.playerOneChoice, P2 = utils.playerTwoChoice;
+
     context.fillStyle = BASE.CANVAS_BACKGROUND;
     context.fillRect(0, 0, BASE.CANVAS_WIDTH, BASE.CANVAS_HEIGHT);
     context.fillStyle = '#ffffff';
-    context.font = '20px sans-serif';
+    context.font = BASE.CANVAS_FONT;
     context.textBaseline = 'top';
-    context.fillText ("Initializing", 50, 90);
+    context.fillText ("LOADING", 200, 200);
 
     // initialize sounds object pools using AudioFX
     // https://github.com/jakesgordon/javascript-audio-fx
-    playerOneSound = AudioFX('resources/audio/shot1.wav', { volume: 1, pool: 10 });
-    playerTwoSound = AudioFX('resources/audio/shot5.wav', { volume: 1, pool: 10 });
+    playerOneSound = AudioFX('resources/audio/shot' + P1 + '.wav', { volume: 1, pool: 10 });
+    playerTwoSound = AudioFX('resources/audio/shot' + P2 + '.wav', { volume: 1, pool: 10 });
     impactSound = AudioFX('resources/audio/impact.wav', { volume: 1, pool: 10 });
 
     // initialize ship objects
-    playerOne = new Ship(START_POS_ONE, utils.shipConfig[2], playerOneSound);
-    playerTwo = new Ship(START_POS_TWO, utils.shipConfig[4], playerTwoSound);
+    playerOne = new Ship(START_POS_ONE, utils.shipConfig[P1], playerOneSound);
+    playerTwo = new Ship(START_POS_TWO, utils.shipConfig[P2], playerTwoSound);
 
     // initialize player lives
     playerOneLife = new Life(1);
@@ -106,6 +113,11 @@ function createGame () {
     context.textBaseline = 'top';
     context.fillText (winner + ' wins!!', 50, 90);
     context.fillText ("Press Enter To Replay", 50, 200);
+    // reset menu
+    currentMenu = null;
+    utils.playerOneChoice = null;
+    utils.playerTwoChoice = null;
+    utils.currentMenuDisplay = "PLAYER 1";
   }
 
   // function to switch application states
@@ -193,6 +205,34 @@ function createGame () {
     window.setTimeout(gameLoop, BASE.ANIMATION_SPEED);
   }
 
+  function bindKeyGameMenu() {
+    $(document).on('keydown', switchMenu);
+  }
+
+  function switchMenu(e) {
+    // spacebar triggers the next ship to display
+    if (e.keyCode === 32) currentMenu.update();
+
+    // enter - player choice entered
+    if (e.keyCode === 13) {
+      if (currentMenu === playerOneMenu) {
+        // enter PlayerOne's choice
+        utils.playerOneChoice = currentMenu.currShipIndex;
+
+        // initialize PlayerTwo's menu
+        playerTwoMenu = new Menu();
+        // this allows for the menu to correctly display the current player choosing
+        utils.currentMenuDisplay = "PLAYER 2";
+        currentMenu = playerTwoMenu;
+      }  else {
+        // enter PlayerTwo's choice
+        utils.playerTwoChoice = currentMenu.currShipIndex;
+        // unbind the menu keys
+        $(document).off('keydown', switchMenu);
+        switchGameState(GAME_STATE_INIT);
+      }
+    }
+  }
   // initialize the game
   function init () {
     switchGameState(GAME_STATE_TITLE);

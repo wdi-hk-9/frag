@@ -1,5 +1,6 @@
 // Ship object constructor. posMap contains the initial starting positions
 // configMap contains the ship/ammo configurations
+// soundPool is the pool of HTML5 audio tags that  reference the shooting wav file for the ship
 
 var Ship = function (posMap, configMap, soundPool) {
   // initialized from configMap

@@ -1,72 +1,83 @@
 var utils = (function () {
 
-var shipConfig = [
-  // medium fire, medium sized ammo, medium range, medium damage, gray ship (0)
-  {
-    spriteIndexArr: [0],
-    omega: 3,
-    speed: 3,
-    firingDelay: 15,
-    ammoSpec: {
-      speed: 9, // multiples of 3
-      size: 30,
-      life: 40,
-      damage: 10
+var
+  FONT_MENU = "20px 'Orbitron' sans-serif",
+  shipConfig = [
+    // medium fire, medium sized ammo, medium range, medium damage, gray ship (0)
+    {
+      spriteIndexArr: [0],
+      omega: 3,
+      speed: 3,
+      firingDelay: 15,
+      ammoSpec: {
+        speed: 9, // multiples of 3
+        size: 30,
+        life: 40,
+        damage: 10
+      },
+      text: "Vindicator: A balanced ship, with decent fire rate, range and damage"
+    },
+    // medium fire, medium sized ammo, medium range, medium damage, green ship (1)
+    {
+      spriteIndexArr: [1],
+      omega: 3,
+      speed: 3,
+      firingDelay: 15,
+      ammoSpec: {
+        speed: 9, // multiples of 3
+        size: 30,
+        life: 40,
+        damage: 10
+      },
+      text: "Phasor: A balanced ship, with decent fire rate, range and damage"
+    },
+    // fast fire, big ammo, very short range, high damage red ship (2)
+    {
+      spriteIndexArr: [2],
+      omega: 3,
+      speed: 3,
+      firingDelay: 2, // no of frames before next shot can be fired
+      ammoSpec: {
+        speed: 6, // multiples of 3
+        size: 70, // ammo size in px
+        life: 20, // ammo life in frames
+        damage: 15 // damage dealt
+      },
+      text: "Warbird: Rapid fire and high damage but extremely short range"
+    },
+    // slow fire, big ammo, long range, high damage, purple ship (3)
+    {
+      spriteIndexArr: [3],
+      omega: 3,
+      speed: 3,
+      firingDelay: 30,
+      ammoSpec: {
+        speed: 9, // multiples of 3
+        size: 70,
+        life: 80,
+        damage: 15
+      },
+      text: "Explorer: Long ranged, high damage weapon but slow rate of fire"
+    },
+    // fast fire, small ammo, long range, low damage, yellow ship (4)
+    {
+      spriteIndexArr: [4],
+      omega: 3,
+      speed: 3,
+      firingDelay: 5, // no of frames before next shot can be fired
+      ammoSpec: {
+        speed: 6, // multiples of 3
+        size: 20, // ammo size in px
+        life: 120, // ammo life in frames
+        damage: 3 // damage dealt
+      },
+      text: "Stinger: Rapid fire, long ranged, light damage dealer"
     }
-  },
-  // medium fire, medium sized ammo, medium range, medium damage, green ship (1)
-  {
-    spriteIndexArr: [1],
-    omega: 3,
-    speed: 3,
-    firingDelay: 15,
-    ammoSpec: {
-      speed: 9, // multiples of 3
-      size: 30,
-      life: 40,
-      damage: 10
-    }
-  },
-  // fast fire, big ammo, very short range, high damage red ship (2)
-  {
-    spriteIndexArr: [2],
-    omega: 3,
-    speed: 3,
-    firingDelay: 2, // no of frames before next shot can be fired
-    ammoSpec: {
-      speed: 6, // multiples of 3
-      size: 70, // ammo size in px
-      life: 20, // ammo life in frames
-      damage: 15 // damage dealt
-    }
-  },
-  // slow fire, big ammo, long range, high damage, purple ship (3)
-  {
-    spriteIndexArr: [3],
-    omega: 3,
-    speed: 3,
-    firingDelay: 30,
-    ammoSpec: {
-      speed: 9, // multiples of 3
-      size: 70,
-      life: 80,
-      damage: 15
-    }
-  },
-  // fast fire, small ammo, long range, low damage, yellow ship (4)
-  {
-    spriteIndexArr: [4],
-    omega: 3,
-    speed: 3,
-    firingDelay: 5, // no of frames before next shot can be fired
-    ammoSpec: {
-      speed: 6, // multiples of 3
-      size: 20, // ammo size in px
-      life: 120, // ammo life in frames
-      damage: 3 // damage dealt
-    }
-  }
-];
+  ],
+  currentMenuDisplay = "PLAYER 1",
+  playerOneChoice = null,
+  playerTwoChoice = null;
+
 
 function bindKeys(playerOne, playerTwo) {
   // bind keys for playerOne
@@ -136,7 +147,11 @@ function hasCollided(object1, object2) {
 return {
   bindKeys: bindKeys,
   hasCollided: hasCollided,
-  shipConfig: shipConfig
+  shipConfig: shipConfig,
+  FONT_MENU: FONT_MENU,
+  currentMenuDisplay: currentMenuDisplay,
+  playerOneChoice: playerOneChoice,
+  playerTwoChoice: playerTwoChoice
 }
 
 }());
