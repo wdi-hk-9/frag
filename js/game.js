@@ -11,6 +11,7 @@ function createGame () {
     winner,
     playerOneSound, playerTwoSound, impactSound,
     playerOneMenu, playerTwoMenu, currentMenu,
+    gameInitialized,
     theCanvas = $("#canvas").get(0),
     context = theCanvas.getContext("2d"),
     //application states
@@ -59,38 +60,40 @@ function createGame () {
   }
 
   function gameStateInit() {
-    var P1 = utils.playerOneChoice, P2 = utils.playerTwoChoice;
+    if (!gameInitialized) {
+      var P1 = utils.playerOneChoice, P2 = utils.playerTwoChoice;
 
-    context.fillStyle = BASE.CANVAS_BACKGROUND;
-    context.fillRect(0, 0, BASE.CANVAS_WIDTH, BASE.CANVAS_HEIGHT);
-    context.fillStyle = '#ffffff';
-    context.font = BASE.CANVAS_FONT;
-    context.textBaseline = 'top';
-    context.fillText ("LOADING", 200, 200);
+      context.fillStyle = BASE.CANVAS_BACKGROUND;
+      context.fillRect(0, 0, BASE.CANVAS_WIDTH, BASE.CANVAS_HEIGHT);
+      context.fillStyle = '#ffffff';
+      context.font = BASE.CANVAS_FONT;
+      context.textBaseline = 'top';
+      context.fillText ("LOADING", 200, 200);
 
-    // initialize sounds object pools using AudioFX
-    // https://github.com/jakesgordon/javascript-audio-fx
-    playerOneSound = AudioFX('resources/audio/shot' + P1 + '.wav', { volume: 1, pool: 10 });
-    playerTwoSound = AudioFX('resources/audio/shot' + P2 + '.wav', { volume: 1, pool: 10 });
-    impactSound = AudioFX('resources/audio/impact.wav', { volume: 1, pool: 10 });
+      // initialize sounds object pools using AudioFX
+      // https://github.com/jakesgordon/javascript-audio-fx
+      playerOneSound = AudioFX('resources/audio/shot' + P1 + '.wav', { volume: 1, pool: 10 });
+      playerTwoSound = AudioFX('resources/audio/shot' + P2 + '.wav', { volume: 1, pool: 10 });
+      impactSound = AudioFX('resources/audio/impact.wav', { volume: 1, pool: 10 });
 
-    // initialize ship objects
-    playerOne = new Ship(START_POS_ONE, utils.shipConfig[P1], playerOneSound);
-    playerTwo = new Ship(START_POS_TWO, utils.shipConfig[P2], playerTwoSound);
+      // initialize ship objects
+      playerOne = new Ship(START_POS_ONE, utils.shipConfig[P1], playerOneSound);
+      playerTwo = new Ship(START_POS_TWO, utils.shipConfig[P2], playerTwoSound);
 
-    // initialize player lives
-    playerOneLife = new Life(1);
-    playerTwoLife = new Life(2);
+      // initialize player lives
+      playerOneLife = new Life(1);
+      playerTwoLife = new Life(2);
 
-    // bind game keys
-    utils.bindKeys(playerOne, playerTwo);
-    // bind enter key to enable restart after game end
-    bindKeyRestart(switchGameState);
-
-    // hack to remove flicker between game state transitions
-    setTimeout(function() {
-      switchGameState(GAME_STATE_PLAY);
-    },2000);
+      // bind game keys
+      utils.bindKeys(playerOne, playerTwo);
+      // bind enter key to enable restart after game end
+      bindKeyRestart(switchGameState);
+      gameInitialized = true;
+      // hack to remove flicker between game state transitions
+      setTimeout(function() {
+        switchGameState(GAME_STATE_PLAY);
+      },2000);
+    }
   }
 
   function gameStatePlay() {
@@ -229,6 +232,8 @@ function createGame () {
         utils.playerTwoChoice = currentMenu.currShipIndex;
         // unbind the menu keys
         $(document).off('keydown', switchMenu);
+        // allow game to initialize in the next GAME STATE
+        gameInitialized = false;
         switchGameState(GAME_STATE_INIT);
       }
     }
