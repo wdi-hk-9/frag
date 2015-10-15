@@ -15,7 +15,7 @@ var
         life: 40,
         damage: 10
       },
-      text: "Vindicator: A balanced ship, with decent fire rate, range and damage"
+      text: "VINDICATOR: A balanced ship, with decent fire rate, range and damage"
     },
     // medium fire, medium sized ammo, medium range, medium damage, green ship (1)
     {
@@ -29,7 +29,7 @@ var
         life: 40,
         damage: 10
       },
-      text: "Phasor: A balanced ship, with decent fire rate, range and damage"
+      text: "PHASOR: A balanced ship, with decent fire rate, range and damage"
     },
     // fast fire, big ammo, very short range, high damage red ship (2)
     {
@@ -43,7 +43,7 @@ var
         life: 20, // ammo life in frames
         damage: 15 // damage dealt
       },
-      text: "Warbird: Rapid fire and high damage but extremely short range"
+      text: "WARBIRD: Rapid fire and high damage but extremely short range"
     },
     // slow fire, big ammo, long range, high damage, purple ship (3)
     {
@@ -57,7 +57,7 @@ var
         life: 80,
         damage: 15
       },
-      text: "Explorer: Long ranged, high damage weapon but slow rate of fire"
+      text: "EXPLORER: Long ranged, high damage weapon but slow rate of fire"
     },
     // fast fire, small ammo, long range, low damage, yellow ship (4)
     {
@@ -71,7 +71,7 @@ var
         life: 120, // ammo life in frames
         damage: 3 // damage dealt
       },
-      text: "Stinger: Rapid fire, long ranged, light damage dealer"
+      text: "STINGER: Rapid fire, long ranged, light damage dealer"
     }
   ],
   currentMenuDisplay = "PLAYER 1",
