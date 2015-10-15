@@ -5,15 +5,8 @@
 // "Revealing module pattern"
 function createGame () {
   'use strict';
+  // game contants
   var
-    currentGameStateFunction, playerOne, playerTwo,
-    playerOneLife, playerTwoLife,
-    winner,
-    playerOneSound, playerTwoSound, impactSound,
-    playerOneMenu, playerTwoMenu, currentMenu,
-    gameInitialized,
-    theCanvas = $("#canvas").get(0),
-    context = theCanvas.getContext("2d"),
     //application states
     GAME_STATE_TITLE = 0,
     GAME_STATE_INIT = 1,
@@ -37,18 +30,23 @@ function createGame () {
     BASE.ANIMATION_SPEED = BASE.MS_PER_SECOND/BASE.FPS;
     BASE.VELOCITY = Math.floor(BASE.DISTANCE_PER_SECOND/BASE.FPS);
     BASE.OMEGA = Math.floor(BASE.ROTATE_PER_SECOND/BASE.FPS);
+  // game variables
+  var
+    currentGameStateFunction, playerOne, playerTwo,
+    playerOneLife, playerTwoLife,
+    winner,
+    playerOneSound, playerTwoSound, impactSound,
+    playerOneMenu, playerTwoMenu, currentMenu,
+    gameInitialized,
+    theCanvas = $("#canvas").get(0),
+    context = theCanvas.getContext("2d");
 
   // gameloop functions corresponding to application states
   function gameStateTitle() {
     // draw background
     context.fillStyle = BASE.CANVAS_BACKGROUND;
     context.fillRect(0, 0, BASE.CANVAS_WIDTH, BASE.CANVAS_HEIGHT);
-    // render text
-    // context.fillStyle = BASE.CANVAS_TEXTCOLOR;
-    // context.font = BASE.CANVAS_FONT;
-    // context.textBaseline = 'top';
-    // context.fillText ("FRAG", 50, 90);
-    // context.fillText ("Shoot to kill!!", 50, 200);
+
     if (!currentMenu) {
       playerOneMenu = new Menu();
       currentMenu = playerOneMenu;

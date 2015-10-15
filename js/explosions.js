@@ -8,30 +8,22 @@ var Explosion = function (x, y) {
   this.halfHeight = (this.height / 2);
   this.srcSpriteSize = 64;
   this.spriteIndexArr = [0,1,2,3,4];
-  this.i = 0;
+  this.frameCtr = 0;
   this.numExplosionFrames = 5;
   this.image = new Image(),
   this.image.src = "resources/images/ExplosionStrip.png";
   this.remove = false;
 }
 
-Explosion.prototype.xPosition = function (index) {
-  return 0;
-}
-
-Explosion.prototype.yPosition = function (index) {
-  return index;
-}
-
 Explosion.prototype.render = function(context) {
-  if (this.i < this.numExplosionFrames) {
+  if (this.frameCtr < this.numExplosionFrames) {
     context.save();
     // draw explosion
     context.drawImage(
       // sprite sheet
       this.image,
       // src position on sprite sheet
-      0, this.srcSpriteSize * this.i,
+      0, this.srcSpriteSize * this.frameCtr,
       // src dimensions
       this.srcSpriteSize, this.srcSpriteSize,
       // dest poition on canvas
@@ -40,7 +32,7 @@ Explosion.prototype.render = function(context) {
       this.width, this.height);
     context.restore();
 
-    this.i++;
+    this.frameCtr++;
   } else {
     this.remove = true;
   }

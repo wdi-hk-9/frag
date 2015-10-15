@@ -18,8 +18,8 @@ var Life = function (playerNumber) {
 Life.prototype.update = function (damage) {
   this.score -= damage;
   this.score = Math.max(0, this.score);
-  if (this.score < 50) this.lifebarColor = this.AMBER;
-  if (this.score < 20) this.lifebarColor = this.RED;
+  if (this.score < 50) { this.lifebarColor = this.AMBER; }
+  if (this.score < 20) { this.lifebarColor = this.RED; }
 
   this.lifebarWidth = this.score/this.MAXLIFE * this.LIFEBAR_INIT_WIDTH;
 };

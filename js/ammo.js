@@ -45,14 +45,6 @@ Ammo.prototype.update = function () {
   }
 }
 
-Ammo.prototype.xPosition = function (index) {
-  return 0;
-}
-
-Ammo.prototype.yPosition = function (index) {
-  return index;
-}
-
 Ammo.prototype.render = function (context) {
   // for rotation, translate the canvas to center of image then rotate
   this.angleInRadians = this.angle * Math.PI / 180;
@@ -66,8 +58,8 @@ Ammo.prototype.render = function (context) {
     // sprite sheet
     this.image,
     // src position on sprite sheet
-    this.srcSpriteSize * this.xPosition(this.ammoIndexArr[this.i]),
-    this.srcSpriteSize * this.yPosition(this.ammoIndexArr[this.i]),
+    0,
+    this.srcSpriteSize * this.ammoIndexArr[0],
     // src dimensions
     this.srcSpriteSize, this.srcSpriteSize,
     // dest poition on canvas
@@ -75,7 +67,4 @@ Ammo.prototype.render = function (context) {
     // dest dimensions
     this.width, this.height);
   context.restore();
-
-  this.i++;
-  if (this.i >= this.ammoIndexArr.length) this.i = 0;
 }

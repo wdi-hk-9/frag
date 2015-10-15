@@ -137,11 +137,11 @@ function hasCollided(object1, object2) {
     bottom1 = object1.y + object1.height,
     bottom2 = object2.y + object2.height;
 
-    if (bottom1 < top2) return(false);
-    if (top1 > bottom2) return(false);
-    if (right1 < left2) return(false);
-    if (left1 > right2) return(false);
-    return(true);
+    if (bottom1 < top2) { return false; }
+    if (top1 > bottom2) { return false; }
+    if (right1 < left2) { return false; }
+    if (left1 > right2) { return false; }
+    return true ;
 }
 
 return {

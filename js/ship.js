@@ -64,14 +64,14 @@ Ship.prototype.update = function () {
 
   // filter for live ammo
   this.liveAmmo = this.liveAmmo
-  .filter(function (e) {
-    return (!e.remove);
+  .filter(function (ammo) {
+    return (!ammo.remove);
   })
 
   // update position of all live ammo
   this.liveAmmo
-  .forEach(function (e) {
-    e.update();
+  .forEach(function (ammo) {
+    ammo.update();
   });
 };
 
