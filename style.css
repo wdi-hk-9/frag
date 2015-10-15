@@ -1,0 +1,23 @@
+body#game-background {
+  font-family: 'Orbitron', sans-serif;
+  background-color: black;
+}
+
+h1.maintitle {
+  color: #48A1FD;
+  font-size: 70px;
+}
+
+h2.subtitle {
+
+  margin-top: 0;
+  color: #48A1FD;
+}
+
+button#instructions {
+  color: white;
+}
+
+canvas {
+  border: 2px solid white;
+}
