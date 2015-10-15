@@ -224,6 +224,9 @@ function createGame () {
 
         // initialize PlayerTwo's menu
         playerTwoMenu = new Menu();
+        // if PlayerOne chose the first ship (index 0), remove it from
+        // PlayerTwo's menu
+        if (utils.playerOneChoice === 0) playerTwoMenu.currShipIndex = 1;
         // this allows for the menu to correctly display the current player choosing
         utils.currentMenuDisplay = "PLAYER 2";
         currentMenu = playerTwoMenu;
