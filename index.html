@@ -2,23 +2,87 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Ch4BaseFile - Template For Chapter 4 Examples</title>
+  <title>FRAG - A Space Shooter</title>
   <link href='https://fonts.googleapis.com/css?family=Orbitron:400,500' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
-
-  </script>
-
 </head>
 
-<body>
-  <div style="position: absolute; top: 50px; left: 50px;">
+<body id="game-background">
+
+  <div class="container text-center">
+    <div class="row">
+      <h1 class="maintitle">FRAG!!</h1>
+    </div>
+
+    <div class="row">
+      <h2 class="col-xs-offset-2 col-xs-4 subtitle">A space shooter</h2>
+      <button class="btn btn-danger col-xs-3" id="instructions" data-toggle="modal" data-target="#myModal">Game Controls</button>
+    </div>
+
     <canvas id="canvas" width="900" height="500">
       Your browser does not support HTML5 Canvas.
     </canvas>
   </div>
 
+  <!-- Modal -->
+  <div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h3 class="modal-title">Gameplay Controls</h3>
+        </div>
+
+        <div class="modal-body">
+          <div class="container text-left">
+            <div class="row">
+
+              <div class="col-xs-3 player-1-controls">
+                <h5>Player 1</h5>
+                <p>
+                  <ul>
+                    <li><strong>W: </strong> Forward</li>
+                    <li><strong>S: </strong> Reverse</li>
+                    <li><strong>D: </strong> Rotate Clockwise</li>
+                    <li><strong>A: </strong> Rotate Anti-Clockwise</li>
+                    <li><strong>E: </strong> Strafe Right</li>
+                    <li><strong>Q: </strong> Strafe Left</li>
+                    <li><strong>SPACE: </strong> Fire</li>
+                  </ul>
+                </p>
+              </div>
+
+              <div class="col-xs-3 player-2-controls">
+                <h5>Player 2</h5>
+                <p>
+                  <ul>
+                    <li><strong>I: </strong> Forward</li>
+                    <li><strong>K: </strong> Reverse</li>
+                    <li><strong>L: </strong> Rotate Clockwise</li>
+                    <li><strong>J: </strong> Rotate Anti-Clockwise</li>
+                    <li><strong>O: </strong> Strafe Right</li>
+                    <li><strong>U: </strong> Strafe Left</li>
+                    <li><strong>DELETE: </strong> Fire</li>
+                  </ul>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/buzz/1.1.10/buzz.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <script src="js/audio-fx.min.js"></script>
   <script src="js/utils.js"></script>
   <script src="js/menu.js"></script>
